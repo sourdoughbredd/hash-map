@@ -1,14 +1,16 @@
 export { LinkedList };
 
 class Node {
+  key = null;
   value = null;
   next = null;
 
-  constructor(value = null, next = null) {
-    this.value = value;
+  constructor(key = null, value = null, next = null) {
+    this.key = key;
     if (next != null && !(next instanceof Node)) {
       throw new Error("The 'next' parameter must be a Node!");
     }
+    this.value = value;
     this.next = next;
   }
 }
@@ -19,24 +21,24 @@ class LinkedList {
   #size = 0;
 
   // Runs in O(1) time
-  append(value) {
+  append(key, value) {
     if (this.isEmpty()) {
-      this.#head = new Node(value);
+      this.#head = new Node(key, value);
       this.#tail = this.#head;
     } else {
-      this.#tail.next = new Node(value);
+      this.#tail.next = new Node(key, value);
       this.#tail = this.#tail.next;
     }
     this.#size += 1;
   }
 
   // Runs in O(1) time
-  prepend(value) {
+  prepend(key, value) {
     if (this.isEmpty()) {
-      this.#head = new Node(value);
+      this.#head = new Node(key, value);
       this.#tail = this.#head;
     } else {
-      this.#head = new Node(value, this.#head);
+      this.#head = new Node(key, value, this.#head);
     }
     this.#size += 1;
   }
@@ -48,12 +50,18 @@ class LinkedList {
 
   // Runs in O(1) time
   head() {
-    return this.#head;
+    return {
+      key: this.#head.key,
+      value: this.#head.value,
+    };
   }
 
   // Runs in O(1) time
   tail() {
-    return this.#tail;
+    return {
+      key: this.#tail.key,
+      value: this.#tail.value,
+    };
   }
 
   // Runs in O(n) time
@@ -74,7 +82,10 @@ class LinkedList {
       currNode = currNode.next;
       index -= 1;
     }
-    return currNode;
+    return {
+      key: currNode.key,
+      value: currNode.value,
+    };
   }
 
   // Runs in O(n)
@@ -96,27 +107,30 @@ class LinkedList {
     currNode.next = null;
     this.#tail = currNode;
     this.#size -= 1;
-    return last;
+    return {
+      key: last.key,
+      value: last.value,
+    };
   }
 
   // Runs in O(n)
-  contains(value) {
+  contains(key) {
     if (this.isEmpty()) return false;
     let currNode = this.#head;
     while (currNode != null) {
-      if (currNode.value == value) return true;
+      if (currNode.key === key) return true;
       currNode = currNode.next;
     }
     return false;
   }
 
   // Runs in O(n)
-  find(value) {
+  find(key) {
     if (this.isEmpty()) return null;
     let currNode = this.#head;
     let currIdx = 0;
     while (currNode != null) {
-      if (currNode.value == value) {
+      if (currNode.key === key) {
         return currIdx;
       }
       currNode = currNode.next;
@@ -126,13 +140,13 @@ class LinkedList {
     return null;
   }
 
-  // If the value is found in the list, removes it and returns true. Otherwise, returns false.
-  remove(value) {
-    if (this.#size == 0) return false;
+  // If the key is found in the list, removes the key-value pair and returns true. Otherwise, returns false.
+  remove(key) {
+    if (this.isEmpty()) return false;
     let currNode = this.#head;
     let prevNode = null;
     while (currNode != null) {
-      if (currNode.value == value) {
+      if (currNode.key === key) {
         // Remove this node
         if (currNode === this.#head) {
           this.#head = this.#head.next;
@@ -168,7 +182,7 @@ class LinkedList {
       if (str !== "") {
         str += " -> ";
       }
-      str += currNode.value;
+      str += `[${currNode.key}, ${currNode.value}]`;
     }
     str += str == "" ? "null" : " -> null";
     return str;
@@ -179,28 +193,28 @@ class LinkedList {
     console.log(this.toString());
     // Print properties
     console.log(
-      `Size: ${this.size()}, Head: ${this.#head && this.#head.value}, Tail: ${
-        this.#tail && this.#tail.value
-      }`
+      `Size: ${this.size()}, Head Key: ${
+        this.#head && this.#head.key
+      }, Tail Key: ${this.#tail && this.#tail.key}`
     );
   }
 }
 
-// const ll = new LinkedList();
-// ll.append(1);
-// ll.append(2);
-// ll.prepend(0);
-// ll.append(3);
-// ll.report();
-// console.log(ll.find(0));
-// console.log(ll.find(1));
-// console.log(ll.find(3));
-// console.log(ll.find(4));
-// ll.remove(0);
-// ll.report();
-// ll.remove(3);
-// ll.report();
-// ll.remove(2);
-// ll.report();
-// ll.remove(1);
-// ll.report();
+const ll = new LinkedList();
+ll.append(1, "one");
+ll.append(2, "two");
+ll.prepend(0, "zero");
+ll.append(3, "three");
+ll.report();
+console.log(ll.find(0));
+console.log(ll.find(1));
+console.log(ll.find(3));
+console.log(ll.find(4));
+ll.remove(0);
+ll.report();
+ll.remove(3);
+ll.report();
+ll.remove(2);
+ll.report();
+ll.remove(1);
+ll.report();
