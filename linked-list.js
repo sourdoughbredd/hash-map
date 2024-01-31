@@ -126,6 +126,31 @@ class LinkedList {
     return null;
   }
 
+  // If the value is found in the list, removes it and returns true. Otherwise, returns false.
+  remove(value) {
+    if (this.#size == 0) return false;
+    let currNode = this.#head;
+    let prevNode = null;
+    while (currNode != null) {
+      if (currNode.value == value) {
+        // Remove this node
+        if (currNode === this.#head) {
+          this.#head = this.#head.next;
+        } else {
+          prevNode.next = currNode.next;
+        }
+        if (currNode === this.#tail) {
+          this.#tail = prevNode;
+        }
+        this.#size -= 1;
+        return true;
+      }
+      prevNode = currNode;
+      currNode = currNode.next;
+    }
+    return false;
+  }
+
   // Runs in O(1)
   isEmpty() {
     return this.#size == 0;
@@ -171,3 +196,11 @@ class LinkedList {
 // console.log(ll.find(1));
 // console.log(ll.find(3));
 // console.log(ll.find(4));
+// ll.remove(0);
+// ll.report();
+// ll.remove(3);
+// ll.report();
+// ll.remove(2);
+// ll.report();
+// ll.remove(1);
+// ll.report();
