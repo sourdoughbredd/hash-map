@@ -36,6 +36,7 @@ class HashMap {
 
   // Gets the value stored in the provided key
   get(key) {
+    if (this.isEmpty()) return null;
     this.#typeCheckKey(key);
     const bucketList = this.#getBucketList(key);
     return bucketList.get(key);
@@ -43,6 +44,7 @@ class HashMap {
 
   // Returns true if the key is in the hash map, false otherwise
   has(key) {
+    if (this.isEmpty()) return false;
     this.#typeCheckKey(key);
     const bucketList = this.#getBucketList(key);
     return bucketList.contains(key);
@@ -50,7 +52,7 @@ class HashMap {
 
   // Removes the key (and it's associated value) from the hash map and returns the value.
   remove(key) {
-    if (this.length() === 0) return null;
+    if (this.isEmpty()) return null;
     this.#typeCheckKey(key);
     const bucketList = this.#getBucketList(key);
     const value = bucketList.remove(key);
@@ -63,7 +65,7 @@ class HashMap {
     return this.#length;
   }
 
-  // Removes all entries in the hash map
+  // Removes all entries in the hash map and resets it to min capacity
   clear() {
     this.#buckets = this.#getFreshBuckets(HashMap.#MIN_CAPACITY);
     this.#length = 0;
@@ -78,9 +80,15 @@ class HashMap {
   // Returns an array of entries in the hash map, where an entry is itself an array, consisting of a key-value pair
   entries() {}
 
+  // Return strue if this hash map is empty, false otherwise
+  isEmpty() {
+    return this.length() === 0;
+  }
+
   // toString() for printing
   toString() {
     let str = `Number of Buckets = ${this.#capacity()}, Length = ${this.length()}`;
+    if (this.isEmpty()) return str;
     for (let bnum = 0; bnum < this.#capacity(); bnum++) {
       const bl = this.#buckets[bnum];
       if (bl.size() == 0) continue;
