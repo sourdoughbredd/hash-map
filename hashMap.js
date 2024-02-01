@@ -96,9 +96,18 @@ class HashMap {
   }
 
   // Returns an array of entries in the hash map, where an entry is itself an array, consisting of a key-value pair
-  entries() {}
+  entries() {
+    if (this.isEmpty()) return [];
+    const entriesArray = [];
+    for (let bucket of this.#buckets) {
+      for (let entry of bucket) {
+        entriesArray.push([entry.key, entry.value]);
+      }
+    }
+    return entriesArray;
+  }
 
-  // Return strue if this hash map is empty, false otherwise
+  // Returns true if this hash map is empty, false otherwise
   isEmpty() {
     return this.length() === 0;
   }
@@ -117,7 +126,6 @@ class HashMap {
 
   // PRIVATE METHODS
 
-  // Get new buckets
   #getFreshBuckets(capacity) {
     const buckets = new Array(capacity);
     for (let i = 0; i < buckets.length; i++) {
@@ -148,11 +156,12 @@ class HashMap {
     if (this.#loadFactor() <= HashMap.#MAX_LOAD_FACTOR) return;
     const newCapacity = 2 * this.#capacity();
     const newBuckets = this.#getFreshBuckets(newCapacity);
-    for (let bl of this.#buckets) {
-      for (let { key, value } of bl) {
-        const bucketNum = this.#getBucketNumber(key);
-        this.#boundsCheck(bucketNum);
-        const newBucket = newBuckets[bucketNum];
+    // Copy over to new buckets
+    for (let bucket of this.#buckets) {
+      for (let { key, value } of bucket) {
+        const hashCode = this.hash(key);
+        const newBucketNum = hashCode % newCapacity;
+        const newBucket = newBuckets[newBucketNum];
         newBucket.put(key, value);
       }
     }
