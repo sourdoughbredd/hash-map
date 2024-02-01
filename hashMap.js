@@ -84,7 +84,16 @@ class HashMap {
   }
 
   // Returns an array of all the values in the hash map
-  values() {}
+  values() {
+    if (this.isEmpty()) return [];
+    const valuesArray = [];
+    for (let bucket of this.#buckets) {
+      for (let entry of bucket) {
+        valuesArray.push(entry.value);
+      }
+    }
+    return valuesArray;
+  }
 
   // Returns an array of entries in the hash map, where an entry is itself an array, consisting of a key-value pair
   entries() {}
