@@ -81,7 +81,7 @@ class HashMap {
 
   // toString() for printing
   toString() {
-    let str = `Number of Buckets = ${this.#capacity()}`;
+    let str = `Number of Buckets = ${this.#capacity()}, Length = ${this.length()}`;
     for (let bnum = 0; bnum < this.#capacity(); bnum++) {
       const bl = this.#buckets[bnum];
       if (bl.size() == 0) continue;
@@ -114,8 +114,7 @@ class HashMap {
     const newCapacity = 2 * this.#capacity();
     const newBuckets = this.#getFreshBuckets(newCapacity);
     for (let bl of this.#buckets) {
-      while (bl.size() > 0) {
-        const { key, value } = bl.pop();
+      for (let { key, value } of bl) {
         const hashCode = this.hash(key);
         const bucketNum = hashCode % newCapacity;
         const newBucket = newBuckets[bucketNum];
@@ -159,21 +158,18 @@ class HashMap {
 // Tests
 
 // Initial length of backing array is 16
+console.log("Checking initialization of empty hash map...");
 const hm = new HashMap();
-console.log(hm.buckets.length);
-
-// Initial length of map is 0
-console.log(hm.length());
+console.log(hm.toString());
 
 // Put some stuff in
+console.log("Adding some entries...");
 hm.set("one", "uno");
 hm.set("two", "dos");
 hm.set("three", "tres");
 hm.set("four", "cuatro");
 hm.set("five", "cinco");
 hm.set("six", "says");
-
-// Print
 console.log(hm.toString());
 
 // Update a key
