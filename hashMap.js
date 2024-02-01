@@ -25,18 +25,11 @@ class HashMap {
   // Places the key-value pair in the HashMap. If the key is already in the map, it is replaced.
   set(key, value) {
     this.#typeCheckKeyValue(key, value);
-
-    // Get hash code for key
-    const hashCode = this.hash(key);
-
-    // Convert to bucket number
-    const bucketNum = hashCode % this.#capacity();
-
+    const bucketNum = this.#getBucketNumber(key);
     // Look in bucket and insert key value pair
     this.#boundsCheck(bucketNum);
     const bucketList = this.#buckets[bucketNum];
     const newEntry = bucketList.put(key, value);
-
     if (newEntry) {
       this.#length += 1;
       this.#checkForResize();
@@ -46,6 +39,10 @@ class HashMap {
   // Gets the value stored in the provided key
   get(key) {
     this.#typeCheckKey(key);
+    const hashCode = this.hash(key);
+    const bucketNum = this.#getBucketNumber(key);
+    const bucketList = this.#buckets[bucketNum];
+    return bucketList.get(key);
   }
 
   // Returns true if the key is in the hash map, false otherwise
@@ -66,7 +63,7 @@ class HashMap {
 
   // Removes all entries in the hash map
   clear() {
-    this.#buckets = this.#getFreshBuckets();
+    this.#buckets = this.#getFreshBuckets(HashMap.#MIN_CAPACITY);
     this.#length = 0;
   }
 
@@ -105,6 +102,10 @@ class HashMap {
     return this.#buckets.length;
   }
 
+  #getBucketNumber(key) {
+    return this.hash(key) % this.#capacity();
+  }
+
   #loadFactor() {
     return this.length() / this.#capacity();
   }
@@ -115,8 +116,8 @@ class HashMap {
     const newBuckets = this.#getFreshBuckets(newCapacity);
     for (let bl of this.#buckets) {
       for (let { key, value } of bl) {
-        const hashCode = this.hash(key);
-        const bucketNum = hashCode % newCapacity;
+        const bucketNum = this.#getBucketNumber(key);
+        this.#boundsCheck(bucketNum);
         const newBucket = newBuckets[bucketNum];
         newBucket.put(key, value);
       }
@@ -188,4 +189,24 @@ console.log("BEFORE RESIZE:");
 console.log(hm.toString());
 console.log("AFTER RESIZE:");
 hm.set(i.toString(), i.toString());
+console.log(hm.toString());
+
+// Reset
+console.log("Clearing hash map using clear()...");
+hm.clear();
+console.log(hm.toString());
+console.log("Adding some entries...");
+hm.set("one", "uno");
+hm.set("two", "dos");
+hm.set("three", "tres");
+hm.set("four", "cuatro");
+hm.set("five", "cinco");
+hm.set("six", "seis");
+console.log(hm.toString());
+
+// Get
+console.log("get('six') returns " + hm.get("six"));
+console.log("get('one') returns " + hm.get("one"));
+console.log("get('eighty-two') returns " + hm.get("eighty-two"));
+console.log("Make sure map is unchanged...");
 console.log(hm.toString());
