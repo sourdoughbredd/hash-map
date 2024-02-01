@@ -75,9 +75,9 @@ class BucketList {
     return false;
   }
 
-  // If the key is found in the list, removes the key-value pair and returns true. Otherwise, returns false.
+  // If the key is found in the list, removes the key-value pair and returns the value. Otherwise, returns null.
   remove(key) {
-    if (this.isEmpty()) return false;
+    if (this.isEmpty()) return null;
     let currNode = this.#head;
     let prevNode = null;
     while (currNode != null) {
@@ -92,12 +92,12 @@ class BucketList {
           this.#tail = prevNode;
         }
         this.#size -= 1;
-        return true;
+        return currNode.value;
       }
       prevNode = currNode;
       currNode = currNode.next;
     }
-    return false;
+    return null;
   }
 
   // Runs in O(1)
@@ -159,38 +159,38 @@ class BucketList {
   }
 }
 
-const bl = new BucketList();
-bl.put(1, "one");
-bl.put(2, "two");
-bl.put(0, "zero");
-bl.put(3, "three");
-bl.report();
-bl.remove(0);
-bl.report();
-bl.remove(3);
-bl.report();
-bl.remove(2);
-bl.report();
-bl.remove(1);
-bl.report();
+// const bl = new BucketList();
+// bl.put(1, "one");
+// bl.put(2, "two");
+// bl.put(0, "zero");
+// bl.put(3, "three");
+// bl.report();
+// bl.remove(0);
+// bl.report();
+// bl.remove(3);
+// bl.report();
+// bl.remove(2);
+// bl.report();
+// bl.remove(1);
+// bl.report();
 
-// Test Iterator
-console.log("Resetting list...");
-bl.put(1, "one");
-bl.put(2, "two");
-bl.put(0, "zero");
-bl.put(3, "three");
-bl.report();
-console.log("testing iterator...");
-for (let entry of bl) {
-  console.log(entry);
-}
+// // Test Iterator
+// console.log("Resetting list...");
+// bl.put(1, "one");
+// bl.put(2, "two");
+// bl.put(0, "zero");
+// bl.put(3, "three");
+// bl.report();
+// console.log("testing iterator...");
+// for (let entry of bl) {
+//   console.log(entry);
+// }
 
-// Test put
-console.log("Running put(1, 'ONE')...");
-bl.put(1, "ONE");
-bl.report();
+// // Test put
+// console.log("Running put(1, 'ONE')...");
+// bl.put(1, "ONE");
+// bl.report();
 
-// Test get
-console.log("get(2) returns " + bl.get(2));
-console.log("get(35) returns " + bl.get(35));
+// // Test get
+// console.log("get(2) returns " + bl.get(2));
+// console.log("get(35) returns " + bl.get(35));
