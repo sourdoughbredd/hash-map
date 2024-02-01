@@ -93,9 +93,17 @@ console.log();
 
 // Keys()
 console.log("TESTING KEYS()...");
-console.log("keys() returns " + hm.keys());
+console.log("keys() returns ...");
+console.log(hm.keys());
 console.log();
 
 // Values()
 console.log("TESTING VALUES()...");
-console.log("values() returns " + hm.values());
+console.log("values() returns...");
+console.log(hm.values());
+console.log();
+
+// Entries()
+console.log("TESTING ENTRIES()...");
+console.log("entries() returns...");
+console.log(hm.entries());
