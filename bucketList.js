@@ -20,7 +20,8 @@ class BucketList {
   #tail = null;
   #size = 0;
 
-  // Puts the key value pair in the list
+  // Puts the key-value pair in the list. If the key is already in the list, replaces that key-value pair.
+  // Returns true if the lsit got bigger, false otherwise;
   // Runs in O(N) time
   put(key, value) {
     if (this.isEmpty()) {
@@ -43,6 +44,19 @@ class BucketList {
     }
     this.#size += 1;
     return true;
+  }
+
+  get(key) {
+    if (this.isEmpty()) return null;
+    let currNode = this.#head;
+    while (currNode != null) {
+      if (currNode.key === key) {
+        return currNode.value;
+      }
+      currNode = currNode.next;
+    }
+    // If we reached here, we didn't find it
+    return null;
   }
 
   // Runs in O(1) time
@@ -173,6 +187,10 @@ for (let entry of bl) {
 }
 
 // Test put
-console.log("testing put() for keys that already exist...");
+console.log("Running put(1, 'ONE')...");
 bl.put(1, "ONE");
 bl.report();
+
+// Test get
+console.log("get(2) returns " + bl.get(2));
+console.log("get(35) returns " + bl.get(35));
