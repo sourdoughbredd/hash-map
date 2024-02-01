@@ -1,0 +1,13 @@
+{
+  "name": "hash-map",
+  "version": "1.0.0",
+  "description": "",
+  "main": "hashMap.js",
+  "type": "module",
+  "scripts": {
+    "test": "node hashMapTests.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
