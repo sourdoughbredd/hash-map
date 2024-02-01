@@ -192,9 +192,4 @@ class HashMap {
       throw new Error("Trying to access index out of bound");
     }
   }
-
-  // TO DELETE (DEV ONLY)
-  get buckets() {
-    return this.#buckets;
-  }
 }
