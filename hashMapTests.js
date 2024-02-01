@@ -90,3 +90,7 @@ console.log(hm.toString());
 console.log("remove('one-hundred') returns " + hm.remove("one-hundred"));
 console.log(hm.toString());
 console.log();
+
+// Keys()
+console.log("TESTING KEYS()...");
+console.log("keys() returns " + hm.keys());
