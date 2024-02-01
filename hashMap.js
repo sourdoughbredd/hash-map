@@ -25,10 +25,7 @@ class HashMap {
   // Places the key-value pair in the HashMap. If the key is already in the map, it is replaced.
   set(key, value) {
     this.#typeCheckKeyValue(key, value);
-    const bucketNum = this.#getBucketNumber(key);
-    // Look in bucket and insert key value pair
-    this.#boundsCheck(bucketNum);
-    const bucketList = this.#buckets[bucketNum];
+    const bucketList = this.#getBucketList(key);
     const newEntry = bucketList.put(key, value);
     if (newEntry) {
       this.#length += 1;
@@ -39,15 +36,15 @@ class HashMap {
   // Gets the value stored in the provided key
   get(key) {
     this.#typeCheckKey(key);
-    const hashCode = this.hash(key);
-    const bucketNum = this.#getBucketNumber(key);
-    const bucketList = this.#buckets[bucketNum];
+    const bucketList = this.#getBucketList(key);
     return bucketList.get(key);
   }
 
   // Returns true if the key is in the hash map, false otherwise
   has(key) {
     this.#typeCheckKey(key);
+    const bucketList = this.#getBucketList(key);
+    return bucketList.contains(key);
   }
 
   // Removes the key (and it's associated value) from the hash map
@@ -104,6 +101,12 @@ class HashMap {
 
   #getBucketNumber(key) {
     return this.hash(key) % this.#capacity();
+  }
+
+  #getBucketList(key) {
+    const bucketNum = this.#getBucketNumber(key);
+    this.#boundsCheck(bucketNum);
+    return this.#buckets[bucketNum];
   }
 
   #loadFactor() {
@@ -205,8 +208,15 @@ hm.set("six", "seis");
 console.log(hm.toString());
 
 // Get
+console.log("TESTING GET()...");
 console.log("get('six') returns " + hm.get("six"));
 console.log("get('one') returns " + hm.get("one"));
 console.log("get('eighty-two') returns " + hm.get("eighty-two"));
 console.log("Make sure map is unchanged...");
 console.log(hm.toString());
+
+// Has
+console.log("TESTING HAS()...");
+console.log("has('six') returns " + hm.has("six"));
+console.log("has('one') returns " + hm.has("one"));
+console.log("has('eighty-two') returns " + hm.has("eighty-two"));
