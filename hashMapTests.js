@@ -94,3 +94,8 @@ console.log();
 // Keys()
 console.log("TESTING KEYS()...");
 console.log("keys() returns " + hm.keys());
+console.log();
+
+// Values()
+console.log("TESTING VALUES()...");
+console.log("values() returns " + hm.values());
