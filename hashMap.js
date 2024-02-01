@@ -1,4 +1,5 @@
 import { BucketList } from "./bucketList.js";
+export { HashMap };
 
 class HashMap {
   // Static properties
@@ -47,10 +48,14 @@ class HashMap {
     return bucketList.contains(key);
   }
 
-  // Removes the key (and it's associated value) from the hash map
+  // Removes the key (and it's associated value) from the hash map and returns the value.
   remove(key) {
+    if (this.length() === 0) return null;
     this.#typeCheckKey(key);
-    this.length -= 1;
+    const bucketList = this.#getBucketList(key);
+    const value = bucketList.remove(key);
+    if (value !== null) this.#length -= 1;
+    return value;
   }
 
   // Returns the number of stored keys in the hash map
@@ -158,65 +163,3 @@ class HashMap {
     return this.#buckets;
   }
 }
-
-// Tests
-
-// Initial length of backing array is 16
-console.log("Checking initialization of empty hash map...");
-const hm = new HashMap();
-console.log(hm.toString());
-
-// Put some stuff in
-console.log("Adding some entries...");
-hm.set("one", "uno");
-hm.set("two", "dos");
-hm.set("three", "tres");
-hm.set("four", "cuatro");
-hm.set("five", "cinco");
-hm.set("six", "says");
-console.log(hm.toString());
-
-// Update a key
-console.log("Updating key='six'...");
-hm.set("six", "seis");
-console.log(hm.toString());
-
-// Fill until resize
-console.log("Filling until resize...");
-let i = 7;
-while (hm.length() < 0.75 * 16) {
-  hm.set(i.toString(), i.toString());
-  i++;
-}
-console.log("BEFORE RESIZE:");
-console.log(hm.toString());
-console.log("AFTER RESIZE:");
-hm.set(i.toString(), i.toString());
-console.log(hm.toString());
-
-// Reset
-console.log("Clearing hash map using clear()...");
-hm.clear();
-console.log(hm.toString());
-console.log("Adding some entries...");
-hm.set("one", "uno");
-hm.set("two", "dos");
-hm.set("three", "tres");
-hm.set("four", "cuatro");
-hm.set("five", "cinco");
-hm.set("six", "seis");
-console.log(hm.toString());
-
-// Get
-console.log("TESTING GET()...");
-console.log("get('six') returns " + hm.get("six"));
-console.log("get('one') returns " + hm.get("one"));
-console.log("get('eighty-two') returns " + hm.get("eighty-two"));
-console.log("Make sure map is unchanged...");
-console.log(hm.toString());
-
-// Has
-console.log("TESTING HAS()...");
-console.log("has('six') returns " + hm.has("six"));
-console.log("has('one') returns " + hm.has("one"));
-console.log("has('eighty-two') returns " + hm.has("eighty-two"));
