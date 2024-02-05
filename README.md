@@ -1,4 +1,4 @@
-# README for HashMap Project
+# hash-map
 
 ## Introduction
 
